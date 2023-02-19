@@ -1,14 +1,18 @@
 class Character extends MovableObject {
 
-    width = 300;
-    height = 270;
-    y = 150;
+    width = 250;
+    height = 250;
+    y = 110;
     x = 120;
-    speed = 4;
+    x_side_gap = 120;
+    y_side_gap = 100;
+    overlap = 10;
+    speed = 6;
     world;
     IMAGES_FLOATING = [];
     IMAGES_SWIMMING = [];
     mirror = false;
+    diving_sound = new Audio('../audio/diving.mp3');
 
     constructor() {
         super().loadImage('../img/1.Sharkie/1.IDLE/1.png');
@@ -40,57 +44,6 @@ class Character extends MovableObject {
         this.moveDown();
     }
 
-    move() {
-        setInterval(() => {
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
-                let i = this.currentImage % this.IMAGES_SWIMMING.length;
-                let path = this.IMAGES_SWIMMING[i];
-                this.img = this.imageCache[path];
-                this.currentImage++;
-            }
-        }, 130);
-    }
-
-    moveRight() {
-        setInterval(() => {
-            if (this.world.keyboard.RIGHT) {
-                this.x += this.speed;
-                this.mirror = false;
-                this.world.camera_x = -this.x;
-            }
-        }, 1000 / 60)
-    }
-
-    moveLeft() {
-        setInterval(() => {
-            if (this.world.keyboard.LEFT) {
-                this.x -= this.speed;
-                this.mirror = true;
-                this.world.camera_x = -this.x;
-            }
-        }, 1000 / 60)
-    }
-
-    moveUp() {
-        setInterval(() => {
-            if (this.world.keyboard.UP) {
-                this.y -= this.speed;
-                this.world.camera_y = -this.y;
-
-            }
-        }, 1000 / 60)
-    }
-
-    moveDown() {
-        setInterval(() => {
-            if (this.world.keyboard.DOWN) {
-                this.y += this.speed;
-                this.world.camera_y = -this.y;
-
-            }
-        }, 1000 / 60)
-    }
-
     float() {
         setInterval(() => {
             let i = this.currentImage % this.IMAGES_FLOATING.length;
@@ -98,8 +51,103 @@ class Character extends MovableObject {
             this.img = this.imageCache[path];
             this.currentImage++;
         }, 130);
-
     }
+
+    move() {
+        setInterval(() => {
+            this.diving_sound.pause();
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
+                let i = this.currentImage % this.IMAGES_SWIMMING.length;
+                let path = this.IMAGES_SWIMMING[i];
+                this.img = this.imageCache[path];
+                this.currentImage++;
+                this.diving_sound.play();
+            }
+        }, 130);
+    }
+
+    moveRight() {
+        setInterval(() => {
+            if (this.world.keyboard.RIGHT && this.x > - this.overlap && this.x < this.x_side_gap) {
+                this.x += this.speed;
+                this.world.camera_x = 0;
+                this.mirror = false;
+            };
+
+            if (this.world.keyboard.RIGHT && this.x >= this.x_side_gap && this.x <= this.world.level.level_end_x - 720 + this.x_side_gap) {
+                this.x += this.speed;
+                this.world.camera_x = -this.x + this.x_side_gap;
+                this.mirror = false;
+            };
+
+            if (this.world.keyboard.RIGHT && this.x > this.world.level.level_end_x - 720 + this.x_side_gap && this.x < this.world.level.level_end_x - this.width) {
+                this.x += this.speed;
+                this.world.camera_x = -this.world.level.level_end_x + 720;
+                this.mirror = false;
+            };
+        }, 1000 / 60)
+    }
+
+    moveLeft() {
+        setInterval(() => {
+            if (this.world.keyboard.LEFT && this.x > 0 && this.x <= this.x_side_gap) {
+                this.x -= this.speed;
+                this.world.camera_x = 0;
+                this.mirror = true;
+            };
+
+            if (this.world.keyboard.LEFT && this.x >= this.x_side_gap && this.x <= this.world.level.level_end_x - this.x_side_gap) {
+                this.x -= this.speed;
+                this.world.camera_x = -this.x + this.x_side_gap;
+                this.mirror = true;
+            };
+
+            if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x - 720 + this.x_side_gap && this.x < this.world.level.level_end_x - this.width) {
+                this.x -= this.speed;
+                this.world.camera_x = -this.world.level.level_end_x + 720;
+                this.mirror = true;
+            };
+        }, 1000 / 60)
+    }
+
+    moveUp() {
+        setInterval(() => {
+            if (this.world.keyboard.UP && this.y > this.world.level.level_end_y - this.overlap - 60 && this.y < this.world.level.level_end_y + this.y_side_gap) {
+                this.y -= this.speed;
+                this.world.camera_y = -this.world.level.level_end_y;
+            };
+
+            if (this.world.keyboard.UP && this.y >= this.world.level.level_end_y + this.y_side_gap && this.y <= this.y_side_gap) {
+                this.y -= this.speed;
+                this.world.camera_y = -this.y + this.y_side_gap;
+            };
+
+            if (this.world.keyboard.UP && this.y < this.world.level.level_start_y + this.overlap + 20 && this.y > this.y_side_gap) {
+                this.y -= this.speed;
+                this.world.camera_y = 0;
+            };
+        }, 1000 / 60)
+    }
+
+    moveDown() {
+        setInterval(() => {
+            if (this.world.keyboard.DOWN && this.y > this.world.level.level_end_y - this.overlap - 70 && this.y < this.world.level.level_end_y + this.y_side_gap) {
+                this.y += this.speed;
+                this.world.camera_y = 320;
+            };
+
+            if (this.world.keyboard.DOWN && this.y >= this.world.level.level_end_y + this.y_side_gap && this.y <= this.y_side_gap) {
+                this.y += this.speed;
+                this.world.camera_y = -this.y + this.y_side_gap;
+            };
+
+            if (this.world.keyboard.DOWN && this.y < this.world.level.level_start_y + this.overlap + 10 && this.y > this.y_side_gap) {
+                this.y += this.speed;
+                this.world.camera_y = 0;
+            };
+        }, 1000 / 60)
+    }
+
 
 
 }

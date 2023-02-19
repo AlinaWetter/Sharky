@@ -1,14 +1,14 @@
-class PufferFish extends MovableObject {
-    width = 60;
-    height = 60;
-    y = 150;
-    x;
+class Endboss extends MovableObject {
+    width = 350;
+    height = 350;
+    y = 0;
+    x = 720 * 5 - this.width;
     IMAGES_SWIMMING = []
 
     constructor() {
-        super().loadImage('../img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim1.png')
-        this.x = 450 + Math.random() * 500;
-        this.y = 0 + Math.random() * 400;
+        super().loadImage('../img/2.Enemy/3 Final Enemy/2.floating/1.png')
+        // this.x = 1300 + Math.random() * 500;
+        // this.y = 0 + Math.random() * 400;
         this.speed = 0.4 + Math.random() * 1;
         this.imagesSwimming();
         this.loadImages(this.IMAGES_SWIMMING);
@@ -16,13 +16,13 @@ class PufferFish extends MovableObject {
     }
 
     imagesSwimming() {
-        for(let x = 1; x < 6; x++) {
-            this.IMAGES_SWIMMING.push(`../img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim${x}.png`)
+        for(let x = 1; x < 13; x++) {
+            this.IMAGES_SWIMMING.push(`../img/2.Enemy/3 Final Enemy/2.floating/${x}.png`)
         }
     }
 
     animate() {
-        this.moveLeft();
+        // this.moveLeft();
         setInterval(() => {
             let i = this.currentImage % this.IMAGES_SWIMMING.length;
             let path = this.IMAGES_SWIMMING[i];

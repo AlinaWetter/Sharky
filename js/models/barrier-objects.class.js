@@ -1,12 +1,10 @@
-class BarrierObject {
-
-    width = 100;
-    height =  300;
-    constructor(imagePath, x, height) {
+class BarrierObject extends MovableObject{
+    constructor(imagePath, x, y, width, height) {
         super().loadImage(imagePath);
         this.x = x;
+        this.y = y;
+        this.width = width;
         this.height = height; 
-        this.y = 480 - this.height;
-        
+        // this.y = 480 - this.height;
     }
 }
