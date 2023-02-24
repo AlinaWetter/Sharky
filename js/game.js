@@ -9,7 +9,6 @@ function init() {
 
 window.addEventListener('keydown', (e) => {
     checkKeyDown(e);
-    console.log(keyboard)
 })
 
 function checkKeyDown(e) {

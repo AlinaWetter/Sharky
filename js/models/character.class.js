@@ -11,6 +11,12 @@ class Character extends MovableObject {
     world;
     IMAGES_FLOATING = [];
     IMAGES_SWIMMING = [];
+    IMAGES_HURT_POISON = [];
+    IMAGES_HURT_ELECTRIC = [];
+    IMAGES_DEAD_POISON = [];
+    IMAGES_DEAD_ELECTRIC = [];
+
+
     mirror = false;
     diving_sound = new Audio('../audio/diving.mp3');
 
@@ -19,6 +25,10 @@ class Character extends MovableObject {
         this.pushImages();
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_FLOATING);
+        this.loadImages(this.IMAGES_HURT_POISON);
+        this.loadImages(this.IMAGES_HURT_ELECTRIC);
+        this.loadImages(this.IMAGES_DEAD_POISON);
+        this.loadImages(this.IMAGES_DEAD_ELECTRIC);
         this.animate()
     }
 
@@ -28,6 +38,18 @@ class Character extends MovableObject {
         };
         for (let x = 1; x < 7; x++) {
             this.IMAGES_SWIMMING.push(`../img/1.Sharkie/3.Swim/${x}.png`)
+        }
+        for (let x = 1; x < 4; x++) {
+            this.IMAGES_HURT_ELECTRIC.push(`../img/1.Sharkie/5.Hurt/2.Electric shock/${x}.png`)
+        }
+        for (let x = 1; x < 5; x++) {
+            this.IMAGES_HURT_POISON.push(`../img/1.Sharkie/5.Hurt/1.Poisoned/${x}.png`)
+        }
+        for (let x = 1; x < 13; x++) {
+            this.IMAGES_DEAD_POISON.push(`../img/1.Sharkie/6.dead/1.Poisoned/${x}.png`)
+        }
+        for (let x = 1; x < 11; x++) {
+            this.IMAGES_DEAD_ELECTRIC.push(`../img/1.Sharkie/6.dead/2.Electro_shock/${x}.png`)
         }
     }
 
@@ -46,21 +68,15 @@ class Character extends MovableObject {
 
     float() {
         setInterval(() => {
-            let i = this.currentImage % this.IMAGES_FLOATING.length;
-            let path = this.IMAGES_FLOATING[i];
-            this.img = this.imageCache[path];
-            this.currentImage++;
-        }, 130);
+            this.playAnimation(this.IMAGES_FLOATING);
+        }, 300);
     }
 
     move() {
         setInterval(() => {
             this.diving_sound.pause();
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
-                let i = this.currentImage % this.IMAGES_SWIMMING.length;
-                let path = this.IMAGES_SWIMMING[i];
-                this.img = this.imageCache[path];
-                this.currentImage++;
+                this.playAnimation(this.IMAGES_SWIMMING);
                 this.diving_sound.play();
             }
         }, 130);
@@ -146,6 +162,35 @@ class Character extends MovableObject {
                 this.world.camera_y = 0;
             };
         }, 1000 / 60)
+    }
+
+    isColliding(obj) {
+        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
+            (this.y + this.height) >= obj.y &&
+            (this.y) <= (obj.y + obj.height)
+        // obj.onCollisionCourse; xy// Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+
+    }
+
+    poisoned() {
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_HURT_POISON);
+        }, 130);
+    }
+
+    electrified() {
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_HURT_ELECTRIC);
+        }, 130);
+    }
+
+    dead() {
+        if (this.isDead()) {
+            setInterval(() => {
+                this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
+            }, 130);
+        }
+
     }
 
 
