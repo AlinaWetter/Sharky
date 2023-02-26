@@ -1,9 +1,4 @@
 class Character extends MovableObject {
-
-    width = 250;
-    height = 250;
-    y = 110;
-    x = 120;
     x_side_gap = 120;
     y_side_gap = 100;
     overlap = 10;
@@ -23,6 +18,10 @@ class Character extends MovableObject {
     constructor() {
         super().loadImage('../img/1.Sharkie/1.IDLE/1.png');
         this.pushImages();
+        this.width = 250;
+        this.height = 250;
+        this.y = 110;
+        this.x = 120;
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_FLOATING);
         this.loadImages(this.IMAGES_HURT_POISON);
@@ -68,16 +67,20 @@ class Character extends MovableObject {
 
     float() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_FLOATING);
+            if (!this.isHurt()) {
+                this.playAnimation(this.IMAGES_FLOATING);
+            }
         }, 300);
     }
 
     move() {
         setInterval(() => {
             this.diving_sound.pause();
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
+            if(!this.isHurt()) {
+                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
                 this.playAnimation(this.IMAGES_SWIMMING);
                 this.diving_sound.play();
+            }
             }
         }, 130);
     }
@@ -173,24 +176,19 @@ class Character extends MovableObject {
     }
 
     poisoned() {
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_HURT_POISON);
-        }, 130);
+        this.playAnimation(this.IMAGES_HURT_POISON);
     }
 
     electrified() {
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_HURT_ELECTRIC);
-        }, 130);
+        this.playAnimation(this.IMAGES_HURT_ELECTRIC);
     }
 
-    dead() {
-        if (this.isDead()) {
-            setInterval(() => {
-                this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
-            }, 130);
-        }
+    deadPoison() {
+        this.playAnimation(this.IMAGES_DEAD_POISON);
+    }
 
+    deadElectric() {
+        this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
     }
 
 
