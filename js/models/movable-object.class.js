@@ -1,56 +1,14 @@
-class MovableObject {
-    img;
-    imageCache = [];
-    currentImage = 0;
+class MovableObject extends DrawableObject {
     speed = 0.75;
-    energy = 1000;
-
-
-
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
-
-    loadImages(arr) {
-        arr.forEach(path => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-    }
+    energy = 100;
+    lastHit;
+    IMAGE_BUBBLE = '../img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
 
     playAnimation(arr) {
         let i = this.currentImage % arr.length;
         let path = arr[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof JellyFish || this instanceof PufferFish) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    }
-
-    flipImage(ctx) {
-        ctx.save();
-        ctx.translate(this.width, 0);
-        ctx.scale(-1, 1);
-        this.x = this.x * -1;
-    }
-
-    flipImageBack(ctx) {
-        this.x = this.x * -1;
-        ctx.restore();
     }
 
     moveUp() {
@@ -78,22 +36,35 @@ class MovableObject {
     }
 
     hit(enemy) {
-        this.energy -= 0.2;
-        if (enemy instanceof PufferFish) {
-            this.poisoned();
+        
+        if (this.energy > 0) {
+            console.log(this.energy)
+            this.energy -= 1;
+            this.lastHit = new Date().getTime();
+
+            if (enemy instanceof PufferFish && this.isHurt()) {
+                this.poisoned();
+            }
+            if (enemy instanceof JellyFish && this.isHurt()) {
+                this.electrified();
+            }
         }
-        if (enemy instanceof JellyFish) {
-            this.electrified();
-        }
-        if (this.energy < 0) {
+
+        if (this.energy <= 0) {
             this.energy = 0;
-            this.dead();
+
+            if (enemy instanceof PufferFish) {
+                this.deadPoison();
+            }
+            if (enemy instanceof JellyFish) {
+                this.deadElectric();
+            }
         }
     }
 
-    isDead() {
-        console.log('dead')
-        return this.energy == 0;
-
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
+        return timepassed < 0.5
     }
 }
