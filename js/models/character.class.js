@@ -10,6 +10,10 @@ class Character extends MovableObject {
     IMAGES_HURT_ELECTRIC = [];
     IMAGES_DEAD_POISON = [];
     IMAGES_DEAD_ELECTRIC = [];
+    IMAGES_ATTACK_BUBBLE_NORMAL = [];
+    bubble = new BubbleObject();
+    lastAttack;
+
 
 
     mirror = false;
@@ -22,13 +26,18 @@ class Character extends MovableObject {
         this.height = 250;
         this.y = 110;
         this.x = 120;
+        this.load();
+        this.animate();
+    }
+
+    load() {
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_FLOATING);
         this.loadImages(this.IMAGES_HURT_POISON);
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
         this.loadImages(this.IMAGES_DEAD_POISON);
         this.loadImages(this.IMAGES_DEAD_ELECTRIC);
-        this.animate()
+        this.loadImages(this.IMAGES_ATTACK_BUBBLE_NORMAL);
     }
 
     pushImages() {
@@ -50,11 +59,18 @@ class Character extends MovableObject {
         for (let x = 1; x < 11; x++) {
             this.IMAGES_DEAD_ELECTRIC.push(`../img/1.Sharkie/6.dead/2.Electro_shock/${x}.png`)
         }
+        for (let x = 1; x < 9; x++) {
+            this.IMAGES_ATTACK_BUBBLE_NORMAL.push(`../img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/${x}.png`)
+        }
     }
 
     animate() {
         this.float();
         this.swim();
+    }
+
+    attack() {
+        this.playAnimation(this.IMAGES_ATTACK_BUBBLE_NORMAL);
     }
 
     swim() {
@@ -76,11 +92,11 @@ class Character extends MovableObject {
     move() {
         setInterval(() => {
             this.diving_sound.pause();
-            if(!this.isHurt()) {
+            if (!this.isHurt()) {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
-                this.playAnimation(this.IMAGES_SWIMMING);
-                this.diving_sound.play();
-            }
+                    this.playAnimation(this.IMAGES_SWIMMING);
+                    this.diving_sound.play();
+                }
             }
         }, 130);
     }
@@ -175,6 +191,14 @@ class Character extends MovableObject {
 
     }
 
+    isAttacking() {
+        let timepassed = new Date().getTime() - this.lastAttack;
+        timepassed = timepassed / 1000;
+        if (timepassed < 0.755) {
+            return true;
+        }
+    }
+
     poisoned() {
         this.playAnimation(this.IMAGES_HURT_POISON);
     }
@@ -190,6 +214,8 @@ class Character extends MovableObject {
     deadElectric() {
         this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
     }
+
+
 
 
 

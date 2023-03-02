@@ -46,9 +46,5 @@ const level1 = new Level (
         new BarrierObject('../img/3. Background/Barrier/1.png', 900, -320, 800, 1000),
         new BarrierObject('../img/3. Background/Barrier/1.png', 720 * 5 -300, -320, 400, 250),
         new BarrierObject('../img/3. Background/Barrier/2.png', 900, 280, 800, 200),
-
-
-
-
     ]
 )

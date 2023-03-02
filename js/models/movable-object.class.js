@@ -2,7 +2,6 @@ class MovableObject extends DrawableObject {
     speed = 0.75;
     energy = 100;
     lastHit;
-    IMAGE_BUBBLE = '../img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
 
     playAnimation(arr) {
         let i = this.currentImage % arr.length;
@@ -36,7 +35,7 @@ class MovableObject extends DrawableObject {
     }
 
     hit(enemy) {
-        
+
         if (this.energy > 0) {
             console.log(this.energy)
             this.energy -= 1;

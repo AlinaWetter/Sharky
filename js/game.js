@@ -26,6 +26,9 @@ function checkKeyDown(e) {
     };
     if(e.keyCode == 32) {
         keyboard.SPACE = true;
+    };
+    if(e.keyCode == 68) {
+        keyboard.ATTACK = true;
     }
 }
 
@@ -48,5 +51,8 @@ function checkKeyUp(e) {
     };
     if(e.keyCode == 32) {
         keyboard.SPACE = false;
+    };
+    if(e.keyCode == 68) {
+        keyboard.ATTACK = false;
     }
 }

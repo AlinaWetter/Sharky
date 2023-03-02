@@ -7,6 +7,7 @@ class World {
     level = level1;
     character = new Character();
     movableObject = new MovableObject();
+    bubbleObjects = [];
     statusBar = new StatusBar();
 
     constructor(canvas, keyboard) {
@@ -15,22 +16,40 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.level.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit(enemy);
-                    this.statusBar.setPercentage(this.character.energy)
-                }
-            });
-        }, 130);
+           this.checkCollisions();
+           this.checkAttack();
+        }, 100);
+    }
+
+    checkAttack() {
+        if(this.character.isAttacking()) {
+            this.character.attack();
+        }
+        if (this.keyboard.ATTACK) {
+            this.character.lastAttack = new Date().getTime()
+            let bubble = new BubbleObject(this.character.x, this.character.y);
+            setTimeout(() => {
+                this.bubbleObjects.push(bubble);
+            }, 700);
+        }
+    }
+
+    checkCollisions() {
+        this.level.enemies.forEach(enemy => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit(enemy);
+                this.statusBar.setPercentage(this.character.energy)
+            }
+        });
     }
 
     draw() {
@@ -59,7 +78,10 @@ class World {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.barrierObjects);
         this.addObjectsToMap(this.level.enemies);
-        this.addToMap(this.character);
+        this.addToMap(new StatusBar(this.LIFE_STATUS_IMAGES, 50, 20));
+        this.addToMap(new StatusBar(this.COIN_STATUS_IMAGES, 50, 50));
+        this.addToMap(new StatusBar(this.BOMB_STATUS_IMAGES, 50, 80))
+        this.addObjectsToMap(this.bubbleObjects);
     }
 
 
