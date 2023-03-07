@@ -61,13 +61,15 @@ class World {
     checkBarrierCollision() {
         this.level.barriers.forEach(barrier => {
             if(this.character.isColliding(barrier)) {
-                console.log('barrier Collide')
-                this.character.barrierCollide();
+                this.character.barrierCollideLeft(barrier.x, barrier.y, barrier.width, barrier.height);
+                this.character.barrierCollideTop(barrier.x, barrier.y, barrier.width, barrier.height);
+                this.character.barrierCollideRight(barrier.x, barrier.y, barrier.width, barrier.height);
+                this.character.barrierCollideBottom(barrier.x, barrier.y, barrier.width, barrier.height);
             } else {
-                this.character.stopLeft = false;
-                this.character.stopRight = false;
-                this.character.stopUp = false;
-                this.character.stopDown = false;
+                this.character.stopDown == false;
+                this.character.stopUp == false;
+                this.character.stopLeft == false;
+                this.character.stopRight == false;
             }
         })
     }

@@ -209,36 +209,57 @@ class Character extends MovableObject {
         // obj.onCollisionCourse; xy// Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
     }
 
-    barrierCollide() {
-        if (this.world.keyboard.LEFT) {
-            this.stopMovingLeft();
-        };
-        if (this.world.keyboard.UP) {
-            this.stopMovingUp();
-        };
-        if (this.world.keyboard.RIGHT) {
-            this.stopMovingRight();
-        };
-        if (this.world.keyboard.DOWN) {
-            this.stopMovingDown();
-        };
+    // barrierCollide(x, y, width, height) {
+    //     if (x + width == this.x) {
+    //         console.log('left')
+    //     };
+    //     if (this.world.keyboard.UP) {
+    //         this.stopMovingUp();
+    //     };
+    //     if (this.world.keyboard.RIGHT) {
+    //         this.stopMovingRight();
+    //     };
+    //     if (this.world.keyboard.DOWN) {
+    //         this.stopMovingDown();
+    //     };
+    // }
+
+    barrierCollideLeft(x, y, width, height) {
+        if(x + width == this.x) {
+            this.stopLeft == true;
+        }
+    }
+    barrierCollideTop(x, y, width, height) {
+        if(y + height == this.y) {
+            this.stopUp == true;
+        }
+    }
+    barrierCollideRight(x, y, width, height) {
+        if(x == this.x + this.width) {
+            this.stopRight == true;
+        }
+    }
+    barrierCollideBottom(x, y, width, height) {
+        if(y == this.y + this.height) {
+            this.stopDown == true;
+        }
     }
 
-    stopMovingLeft() {
-        this.stopLeft = true;
-    }
+    // stopMovingLeft() {
 
-    stopMovingRight() {
-        this.stopRight = true;
-    }
+    // }
 
-    stopMovingUp() {
-        this.stopUp = true;
-    }
+    // stopMovingRight() {
 
-    stopMovingDown() {
-        this.stopDown = true;
-    }
+    // }
+
+    // stopMovingUp() {
+
+    // }
+
+    // stopMovingDown() {
+
+    // }
 
     // barrierCollide() {
     //     if (this.barrierCollideSide() == 'left') {
