@@ -25,13 +25,25 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof JellyFish || this instanceof PufferFish) {
+        if (this instanceof Character || this instanceof JellyFish || this instanceof PufferFish || this instanceof Barrier) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'blue';
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
+    }
+
+    getSmallerCharacterSize(ctx) {
+        let x = this.x + 45;
+        let y = this.y + 100;
+        let width = this.width - 65;
+        let height = this.height - 130;
+        ctx.beginPath();
+        ctx.lineWidth = '3';
+        ctx.strokeStyle = 'red';
+        ctx.rect(x, y, width, height);
+        ctx.stroke();
     }
 
     flipImage(ctx) {

@@ -37,7 +37,6 @@ class MovableObject extends DrawableObject {
     hit(enemy) {
 
         if (this.energy > 0) {
-            console.log(this.energy)
             this.energy -= 1;
             this.lastHit = new Date().getTime();
 
