@@ -18,6 +18,11 @@ class Character extends MovableObject {
     stopUp = false;
     stopDown = false;
 
+    // smallerX = this.x + 45;
+    // smallerY = this.y + 100;
+    // smallerWidth = this.width - 65;
+    // smallerHeight = this.height - 130;
+
     mirror = false;
     diving_sound = new Audio('../audio/diving.mp3');
 
@@ -131,6 +136,7 @@ class Character extends MovableObject {
     moveLeft() {
         setInterval(() => {
             if (!this.stopLeft) {
+                console.log()
                 if (this.world.keyboard.LEFT && this.x > 0 && this.x <= this.x_side_gap) {
                     this.x -= this.speed;
                     this.world.camera_x = 0;
@@ -206,83 +212,35 @@ class Character extends MovableObject {
         return (smallerX + smallerWidth) >= obj.x && smallerX <= (obj.x + obj.width) &&
             (smallerY + smallerHeight) >= obj.y &&
             (smallerY) <= (obj.y + obj.height)
-        // obj.onCollisionCourse; xy// Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
     }
 
-    // barrierCollide(x, y, width, height) {
-    //     if (x + width == this.x) {
-    //         console.log('left')
-    //     };
-    //     if (this.world.keyboard.UP) {
-    //         this.stopMovingUp();
-    //     };
-    //     if (this.world.keyboard.RIGHT) {
-    //         this.stopMovingRight();
-    //     };
-    //     if (this.world.keyboard.DOWN) {
-    //         this.stopMovingDown();
-    //     };
+    // barrierCollideLeft(x, width) {
+    //     console.log(x + width, this.x)
+    //     return this.x + 45 <= (x + width) && this.x + 45 >= x;
+    //     // if (x + width >= this.x + 45) {
+    //     //     this.stopLeft = true;
+    //     // }
     // }
 
-    barrierCollideLeft(x, y, width, height) {
-        if(x + width == this.x) {
-            this.stopLeft == true;
-        }
-    }
-    barrierCollideTop(x, y, width, height) {
-        if(y + height == this.y) {
-            this.stopUp == true;
-        }
-    }
-    barrierCollideRight(x, y, width, height) {
-        if(x == this.x + this.width) {
-            this.stopRight == true;
-        }
-    }
-    barrierCollideBottom(x, y, width, height) {
-        if(y == this.y + this.height) {
-            this.stopDown == true;
-        }
-    }
-
-    // stopMovingLeft() {
-
+    // barrierCollideTop(y, height) {
+    //     return this.y + 100 <= y + height && this.y + 100 >= y;
+    //     // if (y + height <= this.y) {
+    //     //     this.stopUp = true;
+    //     // }
     // }
 
-    // stopMovingRight() {
-
+    // barrierCollideRight(x, width) {
+    //     return this.x + 45 + this.width - 65 >= x && this.x + 45 + this.width - 65 <= x + width;
+    //     // if (x <= this.x + this.width) {
+    //     //     this.stopRight = true;
+    //     // }
     // }
 
-    // stopMovingUp() {
-
-    // }
-
-    // stopMovingDown() {
-
-    // }
-
-    // barrierCollide() {
-    //     if (this.barrierCollideSide() == 'left') {
-    //         this.stopMovingLeft();
-    //     };
-    //     if (this.barrierCollideSide() == 'top') {
-    //         this.stopMovingUp();
-    //     };
-    //     if (this.barrierCollideSide() == 'right') {
-    //         this.stopMovingRight();
-    //     };
-    //     if (this.barrierCollideSide() == 'bottom') {
-    //         this.stopMovingDown();
-    //     }
-    // }
-
-    // barrierCollideSide() {
-    //     let smallerX = this.x + 45;
-    //     let smallerY = this.y + 100;
-    //     let smallerWidth = this.width - 65;
-    //     let smallerHeight = this.height - 130;
-
-    //     if
+    // barrierCollideBottom(y, height) {
+    //     return this.y + 100 + this.height - 130 >= y && this.y + 100 + this.height - 130 <= y + height;
+    //     // if (y <= this.y + this.height) {
+    //     //     this.stopDown = true;
+    //     // }
     // }
 
     isAttacking() {

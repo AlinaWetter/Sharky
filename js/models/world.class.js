@@ -27,10 +27,20 @@ class World {
 
     run() {
         setInterval(() => {
+            this.setMovement();
+            this.checkBarrierCollision();
+        }, 1000 / 60);
+        setInterval(() => {
             this.checkCollisions();
             this.checkAttack();
-            this.checkBarrierCollision();
         }, 100);
+    }
+
+    setMovement() {
+        this.character.stopDown = false;
+        this.character.stopUp = false;
+        this.character.stopLeft = false;
+        this.character.stopRight = false;
     }
 
     checkAttack() {
@@ -49,30 +59,58 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
-                console.log('enemie Collide')
                 this.character.hit(enemy);
                 this.lifeStatusBar.setPercentage(this.character.energy)
             }
         });
     }
 
-    
-
     checkBarrierCollision() {
         this.level.barriers.forEach(barrier => {
-            if(this.character.isColliding(barrier)) {
-                this.character.barrierCollideLeft(barrier.x, barrier.y, barrier.width, barrier.height);
-                this.character.barrierCollideTop(barrier.x, barrier.y, barrier.width, barrier.height);
-                this.character.barrierCollideRight(barrier.x, barrier.y, barrier.width, barrier.height);
-                this.character.barrierCollideBottom(barrier.x, barrier.y, barrier.width, barrier.height);
-            } else {
-                this.character.stopDown == false;
-                this.character.stopUp == false;
-                this.character.stopLeft == false;
-                this.character.stopRight == false;
+            if (this.character.isColliding(barrier)) {
+                this.getCollisionDirection(this.character, barrier)
             }
-        })
+        });
     }
+
+    getCollisionDirection(character, barrier) {
+        const dx = ((character.x + 45) + (character.width - 65) / 2) - (barrier.x + barrier.width / 2);
+        const dy = ((character.y + 100) + (character.height - 130) / 2) - (barrier.y + barrier.height / 2);
+        const width = ((character.width - 65) + barrier.width) / 2;
+        const height = ((character.height - 130) + barrier.height) / 2;
+        const crossWidth = height * dx;
+        const crossHeight = width * dy;
+      
+        if (Math.abs(dx) <= width && Math.abs(dy) <= height) {
+          if (crossWidth > crossHeight) {
+            return (crossWidth > -crossHeight) ? 'right' : 'top';
+          } else {
+            return (crossWidth > -crossHeight) ? 'bottom' : 'left';
+          }
+        }
+      
+        return null;
+      }
+    
+    checkBarrierCollision() {
+        this.level.barriers.forEach(barrier => {
+          const collisionDirection = this.getCollisionDirection(this.character, barrier);
+          if (collisionDirection == 'right') {
+            this.character.stopLeft = true;
+          };
+          if (collisionDirection == 'top') {
+            this.character.stopDown = true;
+          };
+          if (collisionDirection == 'bottom') {
+            this.character.stopUp = true;
+          };
+          if (collisionDirection == 'left') {
+            this.character.stopRight = true;
+          }
+        });
+      }
+    
+    
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -105,7 +143,7 @@ class World {
     }
 
     // drawMovingObjects() {
-        
+
     // }
 
     drawStatusBars() {
@@ -128,7 +166,7 @@ class World {
 
     addBarrier(mo) {
         // mo.drawBarrier(this.ctx);
-        mo.drawFrame(this.ctx)
+        // mo.drawFrame(this.ctx)
     }
 
     addToMap(mo) {
@@ -136,9 +174,9 @@ class World {
             mo.flipImage(this.ctx);
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
-        if(mo == this.character) {
-            mo.getSmallerCharacterSize(this.ctx);
+        // mo.drawFrame(this.ctx);
+        if (mo == this.character) {
+            // mo.getSmallerCharacterSize(this.ctx);
         }
         if (mo.mirror) {
             mo.flipImageBack(this.ctx);
