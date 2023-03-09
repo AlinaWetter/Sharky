@@ -70,7 +70,7 @@ class MovableObject extends DrawableObject {
         timepassed = timepassed / 1000;
         return timepassed < 0.5
     }
-    
+
     isColliding(obj) {
         let smallerX = this.x + 45;
         let smallerY = this.y + 100;
