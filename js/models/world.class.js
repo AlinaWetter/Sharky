@@ -80,37 +80,35 @@ class World {
         const height = ((character.height - 130) + barrier.height) / 2;
         const crossWidth = height * dx;
         const crossHeight = width * dy;
-      
+
         if (Math.abs(dx) <= width && Math.abs(dy) <= height) {
-          if (crossWidth > crossHeight) {
-            return (crossWidth > -crossHeight) ? 'right' : 'top';
-          } else {
-            return (crossWidth > -crossHeight) ? 'bottom' : 'left';
-          }
+            if (crossWidth > crossHeight) {
+                return (crossWidth > -crossHeight) ? 'right' : 'top';
+            } else {
+                return (crossWidth > -crossHeight) ? 'bottom' : 'left';
+            }
         }
-      
+
         return null;
-      }
-    
+    }
+
     checkBarrierCollision() {
         this.level.barriers.forEach(barrier => {
-          const collisionDirection = this.getCollisionDirection(this.character, barrier);
-          if (collisionDirection == 'right') {
-            this.character.stopLeft = true;
-          };
-          if (collisionDirection == 'top') {
-            this.character.stopDown = true;
-          };
-          if (collisionDirection == 'bottom') {
-            this.character.stopUp = true;
-          };
-          if (collisionDirection == 'left') {
-            this.character.stopRight = true;
-          }
+            const collisionDirection = this.getCollisionDirection(this.character, barrier);
+            if (collisionDirection == 'right') {
+                this.character.stopLeft = true;
+            };
+            if (collisionDirection == 'top') {
+                this.character.stopDown = true;
+            };
+            if (collisionDirection == 'bottom') {
+                this.character.stopUp = true;
+            };
+            if (collisionDirection == 'left') {
+                this.character.stopRight = true;
+            }
         });
-      }
-    
-    
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -123,10 +121,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
         this.ctx.translate(0, -this.camera_y);
 
-
         this.drawStatusBars();
 
-        // draw() wird immer wieder aufgerufen.
         self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -136,26 +132,15 @@ class World {
     drawObjects() {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.barrierObjects);
-        this.addBarriersToMap(this.level.barriers)
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.bubbleObjects);
         this.addToMap(this.character);
     }
 
-    // drawMovingObjects() {
-
-    // }
-
     drawStatusBars() {
         this.addToMap(this.lifeStatusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bombStatusBar);
-    }
-
-    addBarriersToMap(objects) {
-        objects.forEach(o => {
-            this.addBarrier(o)
-        })
     }
 
     addObjectsToMap(objects) {
@@ -164,20 +149,12 @@ class World {
         })
     }
 
-    addBarrier(mo) {
-        // mo.drawBarrier(this.ctx);
-        // mo.drawFrame(this.ctx)
-    }
-
     addToMap(mo) {
         if (mo.mirror) {
             mo.flipImage(this.ctx);
         }
         mo.draw(this.ctx);
-        // mo.drawFrame(this.ctx);
-        if (mo == this.character) {
-            // mo.getSmallerCharacterSize(this.ctx);
-        }
+        
         if (mo.mirror) {
             mo.flipImageBack(this.ctx);
         }

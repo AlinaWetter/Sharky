@@ -2,6 +2,11 @@ class MovableObject extends DrawableObject {
     speed = 0.75;
     energy = 100;
     lastHit;
+    world;
+    x_side_gap = 120;
+    y_side_gap = 100;
+    overlap = 10;
+    speed = 6;
 
     playAnimation(arr) {
         let i = this.currentImage % arr.length;
@@ -64,5 +69,16 @@ class MovableObject extends DrawableObject {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
         return timepassed < 0.5
+    }
+    
+    isColliding(obj) {
+        let smallerX = this.x + 45;
+        let smallerY = this.y + 100;
+        let smallerWidth = this.width - 65;
+        let smallerHeight = this.height - 130;
+
+        return (smallerX + smallerWidth) >= obj.x && smallerX <= (obj.x + obj.width) &&
+            (smallerY + smallerHeight) >= obj.y &&
+            (smallerY) <= (obj.y + obj.height)
     }
 }

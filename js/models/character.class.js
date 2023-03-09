@@ -6,23 +6,11 @@ class Character extends MovableObject {
     IMAGES_DEAD_POISON = [];
     IMAGES_DEAD_ELECTRIC = [];
     IMAGES_ATTACK_BUBBLE_NORMAL = [];
-    bubble = new BubbleObject();
-    x_side_gap = 120;
-    y_side_gap = 100;
-    overlap = 10;
-    speed = 6;
-    world;
     lastAttack;
     stopLeft = false;
     stopRight = false;
     stopUp = false;
     stopDown = false;
-
-    // smallerX = this.x + 45;
-    // smallerY = this.y + 100;
-    // smallerWidth = this.width - 65;
-    // smallerHeight = this.height - 130;
-
     mirror = false;
     diving_sound = new Audio('../audio/diving.mp3');
 
@@ -202,46 +190,6 @@ class Character extends MovableObject {
 
         }, 1000 / 60)
     }
-
-    isColliding(obj) {
-        let smallerX = this.x + 45;
-        let smallerY = this.y + 100;
-        let smallerWidth = this.width - 65;
-        let smallerHeight = this.height - 130;
-
-        return (smallerX + smallerWidth) >= obj.x && smallerX <= (obj.x + obj.width) &&
-            (smallerY + smallerHeight) >= obj.y &&
-            (smallerY) <= (obj.y + obj.height)
-    }
-
-    // barrierCollideLeft(x, width) {
-    //     console.log(x + width, this.x)
-    //     return this.x + 45 <= (x + width) && this.x + 45 >= x;
-    //     // if (x + width >= this.x + 45) {
-    //     //     this.stopLeft = true;
-    //     // }
-    // }
-
-    // barrierCollideTop(y, height) {
-    //     return this.y + 100 <= y + height && this.y + 100 >= y;
-    //     // if (y + height <= this.y) {
-    //     //     this.stopUp = true;
-    //     // }
-    // }
-
-    // barrierCollideRight(x, width) {
-    //     return this.x + 45 + this.width - 65 >= x && this.x + 45 + this.width - 65 <= x + width;
-    //     // if (x <= this.x + this.width) {
-    //     //     this.stopRight = true;
-    //     // }
-    // }
-
-    // barrierCollideBottom(y, height) {
-    //     return this.y + 100 + this.height - 130 >= y && this.y + 100 + this.height - 130 <= y + height;
-    //     // if (y <= this.y + this.height) {
-    //     //     this.stopDown = true;
-    //     // }
-    // }
 
     isAttacking() {
         let timepassed = new Date().getTime() - this.lastAttack;
