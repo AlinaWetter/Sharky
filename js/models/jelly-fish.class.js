@@ -6,7 +6,7 @@ class JellyFish extends MovableObject {
     IMAGES_SWIMMING = [];
 
     constructor() {
-        super().loadImage('../img/2.Enemy/2 Jelly fish/Regular damage/Yellow 1.png')
+        super().loadImage('img/2.Enemy/2 Jelly fish/Regular damage/Yellow 1.png')
         this.x = 200 + Math.random() * 500;
         this.speed = 0.4 + Math.random() * 0.8;
         this.imagesSwimming();
@@ -16,7 +16,7 @@ class JellyFish extends MovableObject {
 
     imagesSwimming() {
         for(let x = 1; x < 5; x++) {
-            this.IMAGES_SWIMMING.push(`../img/2.Enemy/2 Jelly fish/Regular damage/Yellow ${x}.png`)
+            this.IMAGES_SWIMMING.push(`img/2.Enemy/2 Jelly fish/Regular damage/Yellow ${x}.png`)
         }
     }
 

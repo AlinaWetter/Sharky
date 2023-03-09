@@ -12,10 +12,10 @@ class Character extends MovableObject {
     stopUp = false;
     stopDown = false;
     mirror = false;
-    diving_sound = new Audio('../audio/diving.mp3');
+    diving_sound = new Audio('audio/diving.mp3');
 
     constructor() {
-        super().loadImage('../img/1.Sharkie/1.IDLE/1.png');
+        super().loadImage('img/1.Sharkie/1.IDLE/1.png');
         this.pushImages();
         this.width = 250;
         this.height = 250;

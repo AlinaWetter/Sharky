@@ -1,6 +1,6 @@
 class BubbleObject extends MovableObject {
 
-    IMAGE_BUBBLE = '../img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
+    IMAGE_BUBBLE = 'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
 
     constructor(x, y) {
         super().loadImage(this.IMAGE_BUBBLE);

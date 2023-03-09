@@ -6,7 +6,7 @@ class PufferFish extends MovableObject {
     IMAGES_SWIMMING = []
 
     constructor() {
-        super().loadImage('../img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim1.png')
+        super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim1.png')
         this.x = 450 + Math.random() * 500;
         this.y = 0 + Math.random() * 400;
         this.speed = 0.4 + Math.random() * 1;
@@ -17,7 +17,7 @@ class PufferFish extends MovableObject {
 
     imagesSwimming() {
         for(let x = 1; x < 6; x++) {
-            this.IMAGES_SWIMMING.push(`../img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim${x}.png`)
+            this.IMAGES_SWIMMING.push(`img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim${x}.png`)
         }
     }
 
