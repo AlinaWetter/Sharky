@@ -37,25 +37,25 @@ class Character extends MovableObject {
 
     pushImages() {
         for (let x = 1; x < 19; x++) {
-            this.IMAGES_FLOATING.push(`../img/1.Sharkie/1.IDLE/${x}.png`)
+            this.IMAGES_FLOATING.push(`img/1.Sharkie/1.IDLE/${x}.png`)
         };
         for (let x = 1; x < 7; x++) {
-            this.IMAGES_SWIMMING.push(`../img/1.Sharkie/3.Swim/${x}.png`)
+            this.IMAGES_SWIMMING.push(`img/1.Sharkie/3.Swim/${x}.png`)
         }
         for (let x = 1; x < 4; x++) {
-            this.IMAGES_HURT_ELECTRIC.push(`../img/1.Sharkie/5.Hurt/2.Electric shock/${x}.png`)
+            this.IMAGES_HURT_ELECTRIC.push(`img/1.Sharkie/5.Hurt/2.Electric shock/${x}.png`)
         }
         for (let x = 1; x < 5; x++) {
-            this.IMAGES_HURT_POISON.push(`../img/1.Sharkie/5.Hurt/1.Poisoned/${x}.png`)
+            this.IMAGES_HURT_POISON.push(`img/1.Sharkie/5.Hurt/1.Poisoned/${x}.png`)
         }
         for (let x = 1; x < 13; x++) {
-            this.IMAGES_DEAD_POISON.push(`../img/1.Sharkie/6.dead/1.Poisoned/${x}.png`)
+            this.IMAGES_DEAD_POISON.push(`img/1.Sharkie/6.dead/1.Poisoned/${x}.png`)
         }
         for (let x = 1; x < 11; x++) {
-            this.IMAGES_DEAD_ELECTRIC.push(`../img/1.Sharkie/6.dead/2.Electro_shock/${x}.png`)
+            this.IMAGES_DEAD_ELECTRIC.push(`img/1.Sharkie/6.dead/2.Electro_shock/${x}.png`)
         }
         for (let x = 1; x < 9; x++) {
-            this.IMAGES_ATTACK_BUBBLE_NORMAL.push(`../img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/${x}.png`)
+            this.IMAGES_ATTACK_BUBBLE_NORMAL.push(`img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/${x}.png`)
         }
     }
 
