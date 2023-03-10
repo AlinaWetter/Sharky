@@ -31,6 +31,10 @@ class World {
             this.checkBarrierCollision();
         }, 1000 / 60);
         setInterval(() => {
+            if(!this.character.isHurt()) {
+               this.character.setInstancesFalse(); 
+            }
+            
             this.checkCollisions();
             this.checkAttack();
         }, 100);
@@ -44,12 +48,9 @@ class World {
     }
 
     checkAttack() {
-        if (this.character.isAttacking()) {
-            this.character.attack();
-        }
-        if (this.keyboard.ATTACK) {
+        if (this.keyboard.ATTACK && !this.character.isHurt()) {
             this.character.lastAttack = new Date().getTime()
-            let bubble = new BubbleObject(this.character.x, this.character.y);
+            let bubble = new BubbleObject(this.character.x, this.character.y, this.character.mirror);
             setTimeout(() => {
                 this.bubbleObjects.push(bubble);
             }, 700);
@@ -154,6 +155,7 @@ class World {
             mo.flipImage(this.ctx);
         }
         mo.draw(this.ctx);
+        mo.drawFrame(this.ctx);        
         
         if (mo.mirror) {
             mo.flipImageBack(this.ctx);

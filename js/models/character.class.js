@@ -11,8 +11,15 @@ class Character extends MovableObject {
     stopRight = false;
     stopUp = false;
     stopDown = false;
-    mirror = false;
     diving_sound = new Audio('audio/diving.mp3');
+    mirror = false;
+    world;
+    poisoned = false;
+    electrified = false;
+    deadPoison = false;
+    deadElectric = false;
+
+
 
     constructor() {
         super().loadImage('img/1.Sharkie/1.IDLE/1.png');
@@ -21,6 +28,7 @@ class Character extends MovableObject {
         this.height = 250;
         this.y = 110;
         this.x = 120;
+        this.speed = 5;
         this.load();
         this.animate();
     }
@@ -60,163 +68,185 @@ class Character extends MovableObject {
     }
 
     animate() {
-        this.float();
-        this.swim();
+        this.animateImages();
+        this.animateMoves();
     }
 
-    attack() {
-        this.playAnimation(this.IMAGES_ATTACK_BUBBLE_NORMAL);
+    setInstancesFalse() {
+        this.poisoned = false;
+        this.electrified = false;
+        this.deadPoison = false;
+        this.deadElectric = false;
+    }
+
+    animateImages() {
+
+        setInterval(() => {
+
+            switch (true) {
+
+                case this.deadElectric:
+                    this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
+                    break;
+
+                case this.deadPoison:
+                    this.playAnimation(this.IMAGES_DEAD_POISON);
+                    break;
+
+                case this.electrified:
+                    this.playAnimation(this.IMAGES_HURT_ELECTRIC);
+
+                    break;
+
+                case this.poisoned:
+                    this.playAnimation(this.IMAGES_HURT_POISON);
+                    break;
+
+                case this.isAttacking():
+                    this.playAnimation(this.IMAGES_ATTACK_BUBBLE_NORMAL);
+                    break;
+
+                case this.move():
+                    this.playAnimation(this.IMAGES_SWIMMING);
+                    break;
+
+                default:
+                    this.playAnimation(this.IMAGES_FLOATING);
+                    
+            }
+
+        }, 130);
+
+    }
+
+    hurt(damage) {
+        this[`${damage}`] = true;
+    }
+
+    animateMoves() {
+        setInterval(() => {
+            this.swim();
+        }, 1000 / 60);
     }
 
     swim() {
-        this.move();
+        this.diving_sound.play();
         this.moveRight();
         this.moveLeft();
         this.moveUp();
         this.moveDown();
     }
 
-    float() {
-        setInterval(() => {
-            if (!this.isHurt() && !this.isAttacking() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.UP && !this.world.keyboard.DOWN) {
-                this.playAnimation(this.IMAGES_FLOATING);
-            }
-        }, 300);
-    }
-
     move() {
-        setInterval(() => {
-            this.diving_sound.pause();
-            if (!this.isHurt() && !this.isAttacking()) {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
-                    this.playAnimation(this.IMAGES_SWIMMING);
-                    this.diving_sound.play();
-                }
-            }
-        }, 130);
-    }
-
-    moveRight() {
-        setInterval(() => {
-            if (!this.stopRight) {
-                if (this.world.keyboard.RIGHT && this.x > - this.overlap && this.x < this.x_side_gap) {
-                    this.x += this.speed;
-                    this.world.camera_x = 0;
-                    this.mirror = false;
-                };
-
-                if (this.world.keyboard.RIGHT && this.x >= this.x_side_gap && this.x <= this.world.level.level_end_x - 720 + this.x_side_gap) {
-                    this.x += this.speed;
-                    this.world.camera_x = -this.x + this.x_side_gap;
-                    this.mirror = false;
-                };
-
-                if (this.world.keyboard.RIGHT && this.x > this.world.level.level_end_x - 720 + this.x_side_gap && this.x < this.world.level.level_end_x - this.width) {
-                    this.x += this.speed;
-                    this.world.camera_x = -this.world.level.level_end_x + 720;
-                    this.mirror = false;
-                };
-            }
-
-        }, 1000 / 60)
-    }
-
-    moveLeft() {
-        setInterval(() => {
-            if (!this.stopLeft) {
-                console.log()
-                if (this.world.keyboard.LEFT && this.x > 0 && this.x <= this.x_side_gap) {
-                    this.x -= this.speed;
-                    this.world.camera_x = 0;
-                    this.mirror = true;
-                };
-
-                if (this.world.keyboard.LEFT && this.x >= this.x_side_gap && this.x <= this.world.level.level_end_x - this.x_side_gap) {
-                    this.x -= this.speed;
-                    this.world.camera_x = -this.x + this.x_side_gap;
-                    this.mirror = true;
-                };
-
-                if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x - 720 + this.x_side_gap && this.x < this.world.level.level_end_x - this.width) {
-                    this.x -= this.speed;
-                    this.world.camera_x = -this.world.level.level_end_x + 720;
-                    this.mirror = true;
-                };
-            }
-
-        }, 1000 / 60)
-    }
-
-    moveUp() {
-        setInterval(() => {
-            if (!this.stopUp) {
-                if (this.world.keyboard.UP && this.y > this.world.level.level_end_y - this.overlap - 60 && this.y < this.world.level.level_end_y + this.y_side_gap) {
-                    this.y -= this.speed;
-                    this.world.camera_y = -this.world.level.level_end_y;
-                };
-
-                if (this.world.keyboard.UP && this.y >= this.world.level.level_end_y + this.y_side_gap && this.y <= this.y_side_gap) {
-                    this.y -= this.speed;
-                    this.world.camera_y = -this.y + this.y_side_gap;
-                };
-
-                if (this.world.keyboard.UP && this.y < this.world.level.level_start_y + this.overlap + 20 && this.y > this.y_side_gap) {
-                    this.y -= this.speed;
-                    this.world.camera_y = 0;
-                };
-            }
-
-        }, 1000 / 60)
-    }
-
-    moveDown() {
-        setInterval(() => {
-            if (!this.stopDown) {
-                if (this.world.keyboard.DOWN && this.y > this.world.level.level_end_y - this.overlap - 70 && this.y < this.world.level.level_end_y + this.y_side_gap) {
-                    this.y += this.speed;
-                    this.world.camera_y = 320;
-                };
-
-                if (this.world.keyboard.DOWN && this.y >= this.world.level.level_end_y + this.y_side_gap && this.y <= this.y_side_gap) {
-                    this.y += this.speed;
-                    this.world.camera_y = -this.y + this.y_side_gap;
-                };
-
-                if (this.world.keyboard.DOWN && this.y < this.world.level.level_start_y + this.overlap + 10 && this.y > this.y_side_gap) {
-                    this.y += this.speed;
-                    this.world.camera_y = 0;
-                };
-            }
-
-        }, 1000 / 60)
-    }
-
-    isAttacking() {
-        let timepassed = new Date().getTime() - this.lastAttack;
-        timepassed = timepassed / 1000;
-        if (timepassed < 0.795) {
-            return true;
+        if (!this.isHurt() && !this.isAttacking() && this.keyPressed()) {
+            return true
         }
     }
 
-    poisoned() {
-        this.playAnimation(this.IMAGES_HURT_POISON);
+    keyPressed() {
+        if (keyboard.RIGHT || keyboard.LEFT || keyboard.UP || keyboard.DOWN) {
+            return true
+        }
+
     }
 
-    electrified() {
-        this.playAnimation(this.IMAGES_HURT_ELECTRIC);
+    moveRight() {
+
+        if (!this.stopRight) {
+            if (this.world.keyboard.RIGHT && this.x > - this.overlap && this.x < this.x_side_gap) {
+                this.x += this.speed;
+                this.world.camera_x = 0;
+                this.mirror = false;
+            };
+
+            if (this.world.keyboard.RIGHT && this.x >= this.x_side_gap && this.x <= this.world.level.level_end_x - 720 + this.x_side_gap) {
+                this.x += this.speed;
+                this.world.camera_x = -this.x + this.x_side_gap;
+                this.mirror = false;
+            };
+
+            if (this.world.keyboard.RIGHT && this.x > this.world.level.level_end_x - 720 + this.x_side_gap && this.x < this.world.level.level_end_x - this.width) {
+                this.x += this.speed;
+                this.world.camera_x = -this.world.level.level_end_x + 720;
+                this.mirror = false;
+            };
+        }
+
     }
 
-    deadPoison() {
-        this.playAnimation(this.IMAGES_DEAD_POISON);
+    moveLeft() {
+
+        if (!this.stopLeft) {
+            console.log()
+            if (this.world.keyboard.LEFT && this.x > 0 && this.x <= this.x_side_gap) {
+                this.x -= this.speed;
+                this.world.camera_x = 0;
+                this.mirror = true;
+            };
+
+            if (this.world.keyboard.LEFT && this.x >= this.x_side_gap && this.x <= this.world.level.level_end_x - this.x_side_gap) {
+                this.x -= this.speed;
+                this.world.camera_x = -this.x + this.x_side_gap;
+                this.mirror = true;
+            };
+
+            if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x - 720 + this.x_side_gap && this.x < this.world.level.level_end_x - this.width) {
+                this.x -= this.speed;
+                this.world.camera_x = -this.world.level.level_end_x + 720;
+                this.mirror = true;
+            };
+        }
+
     }
 
-    deadElectric() {
-        this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
+    moveUp() {
+
+        if (!this.stopUp) {
+            if (this.world.keyboard.UP && this.y > this.world.level.level_end_y - this.overlap - 60 && this.y < this.world.level.level_end_y + this.y_side_gap) {
+                this.y -= this.speed;
+                this.world.camera_y = -this.world.level.level_end_y;
+            };
+
+            if (this.world.keyboard.UP && this.y >= this.world.level.level_end_y + this.y_side_gap && this.y <= this.y_side_gap) {
+                this.y -= this.speed;
+                this.world.camera_y = -this.y + this.y_side_gap;
+            };
+
+            if (this.world.keyboard.UP && this.y < this.world.level.level_start_y + this.overlap + 20 && this.y > this.y_side_gap) {
+                this.y -= this.speed;
+                this.world.camera_y = 0;
+            };
+        }
     }
 
+    moveDown() {
 
+        if (!this.stopDown) {
+            if (this.world.keyboard.DOWN && this.y > this.world.level.level_end_y - this.overlap - 70 && this.y < this.world.level.level_end_y + this.y_side_gap) {
+                this.y += this.speed;
+                this.world.camera_y = 320;
+            };
 
+            if (this.world.keyboard.DOWN && this.y >= this.world.level.level_end_y + this.y_side_gap && this.y <= this.y_side_gap) {
+                this.y += this.speed;
+                this.world.camera_y = -this.y + this.y_side_gap;
+            };
 
+            if (this.world.keyboard.DOWN && this.y < this.world.level.level_start_y + this.overlap + 10 && this.y > this.y_side_gap) {
+                this.y += this.speed;
+                this.world.camera_y = 0;
+            };
+        }
+    }
 
+    isAttacking() {
+        if (!this.isHurt()) {
+            let timepassed = new Date().getTime() - this.lastAttack;
+            timepassed = timepassed / 1000;
+            if (timepassed < 0.795) {
+                return true;
+            }
+        }
+
+    }
 }

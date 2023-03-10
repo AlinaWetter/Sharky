@@ -1,12 +1,11 @@
 class MovableObject extends DrawableObject {
-    speed = 0.75;
+    speed = 4;
     energy = 100;
     lastHit;
-    world;
     x_side_gap = 120;
     y_side_gap = 100;
     overlap = 10;
-    speed = 6;
+    mirror;
 
     playAnimation(arr) {
         let i = this.currentImage % arr.length;
@@ -34,7 +33,12 @@ class MovableObject extends DrawableObject {
     }
 
     moveLeft() {
+        
         setInterval(() => {
+            if (this.x < 0) {
+                this.x = 720 * 5;
+                this.y = -320 + Math.random() * 800;
+            }
             this.x -= this.speed;
         }, 1000 / 60);
     }
@@ -46,10 +50,11 @@ class MovableObject extends DrawableObject {
             this.lastHit = new Date().getTime();
 
             if (enemy instanceof PufferFish && this.isHurt()) {
-                this.poisoned();
+                this.hurt('poisoned');
             }
             if (enemy instanceof JellyFish && this.isHurt()) {
-                this.electrified();
+                this.hurt('electrified');
+
             }
         }
 
@@ -57,10 +62,12 @@ class MovableObject extends DrawableObject {
             this.energy = 0;
 
             if (enemy instanceof PufferFish) {
-                this.deadPoison();
+                this.hurt('deadPoison');
+
             }
             if (enemy instanceof JellyFish) {
-                this.deadElectric();
+                this.hurt('deadElectric');
+
             }
         }
     }
@@ -68,14 +75,14 @@ class MovableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-        return timepassed < 0.5
+        return timepassed < 0.4
     }
 
     isColliding(obj) {
-        let smallerX = this.x + 45;
-        let smallerY = this.y + 100;
-        let smallerWidth = this.width - 65;
-        let smallerHeight = this.height - 130;
+        let smallerX = this.x + 60;
+        let smallerY = this.y + 120;
+        let smallerWidth = this.width - 120;
+        let smallerHeight = this.height - 180;
 
         return (smallerX + smallerWidth) >= obj.x && smallerX <= (obj.x + obj.width) &&
             (smallerY + smallerHeight) >= obj.y &&

@@ -2,19 +2,35 @@ class BubbleObject extends MovableObject {
 
     IMAGE_BUBBLE = 'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
 
-    constructor(x, y) {
+    constructor(x, y, mirror) {
         super().loadImage(this.IMAGE_BUBBLE);
-        this.y = y + 140;
-        this.x = x + 150;
-        this.width = 40;
-        this.height = 40;
-        this.attack()
+        if (mirror) {
+            this.y = y + 140;
+            this.x = x + 30;
+            this.width = 40;
+            this.height = 40;
+            this.mirror = mirror
+            this.attack()
+        } else {
+            this.y = y + 140;
+            this.x = x + 150;
+            this.width = 40;
+            this.height = 40;
+            this.mirror = mirror
+            this.attack()
+        }
+
     }
 
     attack() {
-            // this.x = x;
-            // this.y = y;
+        if (this.mirror) {
+            this.x - 200;
+            this.moveLeft();
+            this.speed = 1.5;
+        } else {
             this.moveRight();
             this.speed = 1.5;
+        }
+
     }
 }
