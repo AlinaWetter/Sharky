@@ -6,14 +6,14 @@ class BubbleObject extends MovableObject {
         super().loadImage(this.IMAGE_BUBBLE);
         if (mirror) {
             this.y = y + 140;
-            this.x = x + 30;
+            this.x = x + 90;
             this.width = 40;
             this.height = 40;
             this.mirror = mirror
             this.attack()
         } else {
             this.y = y + 140;
-            this.x = x + 150;
+            this.x = x + 110;
             this.width = 40;
             this.height = 40;
             this.mirror = mirror
@@ -24,7 +24,7 @@ class BubbleObject extends MovableObject {
 
     attack() {
         if (this.mirror) {
-            this.x - 200;
+            // this.x - 200;
             this.moveLeft();
             this.speed = 1.5;
         } else {

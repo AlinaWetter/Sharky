@@ -26,16 +26,7 @@ const level1 = new Level (
         new PufferFish(),
         new PufferFish(),
         new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
+
 
         new Endboss()
     ],

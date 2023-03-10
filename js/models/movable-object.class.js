@@ -6,6 +6,9 @@ class MovableObject extends DrawableObject {
     y_side_gap = 100;
     overlap = 10;
     mirror;
+    world;
+    
+
 
     playAnimation(arr) {
         let i = this.currentImage % arr.length;
@@ -33,7 +36,7 @@ class MovableObject extends DrawableObject {
     }
 
     moveLeft() {
-        
+
         setInterval(() => {
             if (this.x < 0) {
                 this.x = 720 * 5;
@@ -87,5 +90,11 @@ class MovableObject extends DrawableObject {
         return (smallerX + smallerWidth) >= obj.x && smallerX <= (obj.x + obj.width) &&
             (smallerY + smallerHeight) >= obj.y &&
             (smallerY) <= (obj.y + obj.height)
+    }
+
+    isNear(obj) {
+        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
+            (this.y + this.height) >= obj.y &&
+            (this.y) <= (obj.y + obj.height)
     }
 }

@@ -13,11 +13,11 @@ class Character extends MovableObject {
     stopDown = false;
     diving_sound = new Audio('audio/diving.mp3');
     mirror = false;
-    world;
     poisoned = false;
     electrified = false;
     deadPoison = false;
     deadElectric = false;
+    bubbleAttack = false;
 
 
 
@@ -87,32 +87,44 @@ class Character extends MovableObject {
 
                 case this.deadElectric:
                     this.playAnimation(this.IMAGES_DEAD_ELECTRIC);
+                    this.diving_sound.pause();
                     break;
 
                 case this.deadPoison:
                     this.playAnimation(this.IMAGES_DEAD_POISON);
+                    this.diving_sound.pause();
+
                     break;
 
                 case this.electrified:
                     this.playAnimation(this.IMAGES_HURT_ELECTRIC);
+                    this.diving_sound.pause();
 
                     break;
 
                 case this.poisoned:
                     this.playAnimation(this.IMAGES_HURT_POISON);
+                    this.diving_sound.pause();
+
                     break;
 
-                case this.isAttacking():
+                case this.bubbleAttack:
+                    // this.diving_sound.pause();
                     this.playAnimation(this.IMAGES_ATTACK_BUBBLE_NORMAL);
+                    if (this.IMAGES_ATTACK_BUBBLE_NORMAL.length == this.currentImage) {
+                        this.bubbleAttack = false;
+                    }
                     break;
 
                 case this.move():
                     this.playAnimation(this.IMAGES_SWIMMING);
+                    this.diving_sound.play();
                     break;
 
                 default:
+                    this.diving_sound.pause();
                     this.playAnimation(this.IMAGES_FLOATING);
-                    
+
             }
 
         }, 130);
@@ -130,7 +142,6 @@ class Character extends MovableObject {
     }
 
     swim() {
-        this.diving_sound.play();
         this.moveRight();
         this.moveLeft();
         this.moveUp();
@@ -138,7 +149,7 @@ class Character extends MovableObject {
     }
 
     move() {
-        if (!this.isHurt() && !this.isAttacking() && this.keyPressed()) {
+        if (!this.isHurt() && !this.bubbleAttack && this.keyPressed()) {
             return true
         }
     }
@@ -239,14 +250,18 @@ class Character extends MovableObject {
         }
     }
 
-    isAttacking() {
-        if (!this.isHurt()) {
-            let timepassed = new Date().getTime() - this.lastAttack;
-            timepassed = timepassed / 1000;
-            if (timepassed < 0.795) {
-                return true;
-            }
-        }
+    // isAttacking() {
+    //     if (!this.isHurt()) {
+    //         let timepassed = new Date().getTime() - this.lastAttack;
+    //         timepassed = timepassed / 1000;
+    //         if (timepassed < 0.795) {
+    //             this.bubbleAttack();
+    //         }
+    //     }
+    // }
 
+    isAttacking() {
+        this.bubbleAttack = true;
+        this.currentImage = 0;
     }
 }

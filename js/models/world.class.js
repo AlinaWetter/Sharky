@@ -6,6 +6,8 @@ class World {
     camera_y = 0;
     level = level1;
     character = new Character();
+    pufferFish = new PufferFish();
+    // pufferFishTransition = false;
     movableObject = new MovableObject();
     bubbleObjects = [];
     lifeStatusBar = new LifeStatusBar();
@@ -31,10 +33,10 @@ class World {
             this.checkBarrierCollision();
         }, 1000 / 60);
         setInterval(() => {
-            if(!this.character.isHurt()) {
-               this.character.setInstancesFalse(); 
+            if (!this.character.isHurt()) {
+                this.character.setInstancesFalse();
             }
-            
+
             this.checkCollisions();
             this.checkAttack();
         }, 100);
@@ -48,12 +50,14 @@ class World {
     }
 
     checkAttack() {
-        if (this.keyboard.ATTACK && !this.character.isHurt()) {
-            this.character.lastAttack = new Date().getTime()
+        // && !this.character.isHurt()
+        if (this.keyboard.ATTACK) {
+            this.character.isAttacking();
+            // this.character.lastAttack = new Date().getTime()
             let bubble = new BubbleObject(this.character.x, this.character.y, this.character.mirror);
             setTimeout(() => {
                 this.bubbleObjects.push(bubble);
-            }, 700);
+            }, 950);
         }
     }
 
@@ -63,14 +67,20 @@ class World {
                 this.character.hit(enemy);
                 this.lifeStatusBar.setPercentage(this.character.energy)
             }
+            if (this.character.isNear(enemy) && enemy instanceof PufferFish) {
+                console.log('near', enemy.pufferFishTransition)
+                enemy.pufferFishTransition = true;
+            } else {
+                enemy.pufferFishTransition = false;
+            }
         });
     }
 
     checkBarrierCollision() {
         this.level.barriers.forEach(barrier => {
-            if (this.character.isColliding(barrier)) {
+            if (this.character.isColliding(barrier) && this.character instanceof Character) {
                 this.getCollisionDirection(this.character, barrier)
-            }
+            };
         });
     }
 
@@ -155,8 +165,8 @@ class World {
             mo.flipImage(this.ctx);
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);        
-        
+        mo.drawFrame(this.ctx);
+
         if (mo.mirror) {
             mo.flipImageBack(this.ctx);
         }
