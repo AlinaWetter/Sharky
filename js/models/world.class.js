@@ -67,9 +67,9 @@ class World {
                 this.character.hit(enemy);
                 this.lifeStatusBar.setPercentage(this.character.energy)
             }
-            if (this.character.isNear(enemy) && enemy instanceof PufferFish) {
-                console.log('near', enemy.pufferFishTransition)
+            if (this.character.isNear(enemy) && enemy instanceof PufferFish && !enemy.pufferFishTransition) {
                 enemy.pufferFishTransition = true;
+                enemy.lastHit = new Date().getTime();
             } else {
                 enemy.pufferFishTransition = false;
             }

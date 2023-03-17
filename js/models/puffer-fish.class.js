@@ -8,6 +8,7 @@ class PufferFish extends MovableObject {
     IMAGES_TRANSITION = []
     IMAGES_BUBBLESWIM = []
     pufferFishTransition = false;
+    lastHit;
 
     constructor() {
         super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim1.png')
@@ -35,15 +36,18 @@ class PufferFish extends MovableObject {
         setInterval(() => {
 
             switch (true) {
-                case this.pufferFishTransition:
+                case this.playTransition():
+                    console.log('transit');
 
-                    this.playAnimation(this.IMAGES_BUBBLESWIM);
+                    this.playAnimation(this.IMAGES_TRANSITION)
+                    break;
 
-                break;
+                case this.playBubbleSwim():
+                    console.log('bubbleswim');
 
-                // case value:
+                    this.playAnimation(this.IMAGES_BUBBLESWIM)
 
-                //     break;
+                    break;
 
                 // case value:
 
@@ -55,9 +59,17 @@ class PufferFish extends MovableObject {
 
                     break;
             }
-            
+
         }, 130);
 
+    }
+
+    playTransition() {
+       return this.pufferFishTransition && (new Date().getTime() - this.lastHit) < 10
+    }
+
+    playBubbleSwim() {
+        return this.pufferFishTransition && (new Date().getTime() - this.lastHit) > 10
     }
 
     imagesSwimming() {
