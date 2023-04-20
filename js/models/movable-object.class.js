@@ -2,14 +2,12 @@ class MovableObject extends DrawableObject {
     speed = 4;
     energy = 100;
     lastHit;
+    firstHit;
     x_side_gap = 120;
     y_side_gap = 100;
     overlap = 10;
     mirror;
-    world;
     
-
-
     playAnimation(arr) {
         let i = this.currentImage % arr.length;
         let path = arr[i];
@@ -82,10 +80,10 @@ class MovableObject extends DrawableObject {
     }
 
     isColliding(obj) {
-        let smallerX = this.x + 60;
-        let smallerY = this.y + 120;
-        let smallerWidth = this.width - 120;
-        let smallerHeight = this.height - 180;
+        let smallerX = this.x + this.offset.x;
+        let smallerY = this.y + this.offset.y;
+        let smallerWidth = this.width + this.offset.width;
+        let smallerHeight = this.height + this.offset.height;
 
         return (smallerX + smallerWidth) >= obj.x && smallerX <= (obj.x + obj.width) &&
             (smallerY + smallerHeight) >= obj.y &&

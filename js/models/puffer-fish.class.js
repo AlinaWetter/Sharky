@@ -7,8 +7,11 @@ class PufferFish extends MovableObject {
     IMAGES_SWIMMING = []
     IMAGES_TRANSITION = []
     IMAGES_BUBBLESWIM = []
-    pufferFishTransition = false;
-    lastHit;
+    pufferFishTransition;
+    isInflating;
+    lastTransition;
+    world;
+
 
     constructor() {
         super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim1.png')
@@ -18,10 +21,11 @@ class PufferFish extends MovableObject {
         this.height = 50;
         this.speed = 0.4 + Math.random() * 1;
         this.imagesSwimming();
+        this.isInflating = false;
+        this.pufferFishTransition = false;
         this.load();
         this.animate();
         this.moveLeft();
-        this.pufferFishTransition = false;
 
     }
 
@@ -33,43 +37,42 @@ class PufferFish extends MovableObject {
 
     animate() {
 
-        setInterval(() => {
+        setTimeout(() => {
+            setInterval(() => {
+                if(this.isInflating && world.character.moving) {
+                        this.playAnimation(this.IMAGES_TRANSITION);
+                        if (this.IMAGES_TRANSITION.length == this.currentImage) {
+                            this.isInflating = false;
+                        }
+                }
+            }, 50);
 
-            switch (true) {
-                case this.playTransition():
-                    console.log('transit');
+            setInterval(() => {
+                switch (true) {
+                    case this.isInflating && !world.character.moving:
+                        this.playAnimation(this.IMAGES_TRANSITION);
+                        if (this.IMAGES_TRANSITION.length == this.currentImage) {
+                            this.isInflating = false;
+                        }
+                        break;
 
-                    this.playAnimation(this.IMAGES_TRANSITION)
-                    break;
+                    case this.pufferFishTransition && !this.isInflating:
+                        this.playAnimation(this.IMAGES_BUBBLESWIM);
+                        break;
 
-                case this.playBubbleSwim():
-                    console.log('bubbleswim');
+                    default:
+                        this.playAnimation(this.IMAGES_SWIMMING);
+                }
+            }, 130);
+        }, 1000);
 
-                    this.playAnimation(this.IMAGES_BUBBLESWIM)
-
-                    break;
-
-                // case value:
-
-                //     break;
-
-                default:
-                    this.playAnimation(this.IMAGES_SWIMMING);
-                    // this.playAnimation(this.IMAGES_BUBBLESWIM);
-
-                    break;
-            }
-
-        }, 130);
 
     }
 
-    playTransition() {
-       return this.pufferFishTransition && (new Date().getTime() - this.lastHit) < 10
-    }
-
-    playBubbleSwim() {
-        return this.pufferFishTransition && (new Date().getTime() - this.lastHit) > 10
+    inflatingTransition() {
+        this.isInflating = true;
+        this.pufferFishTransition = true;
+        this.currentImage = 0;
     }
 
     imagesSwimming() {
@@ -83,11 +86,4 @@ class PufferFish extends MovableObject {
             this.IMAGES_BUBBLESWIM.push(`img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim${x}.png`)
         };
     }
-
-    // animate() {
-    //     this.moveLeft();
-    //     setInterval(() => {
-    //         this.playAnimation(this.IMAGES_SWIMMING);
-    //     }, 180);
-    // }
 }

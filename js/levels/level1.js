@@ -85,5 +85,10 @@ const level1 = new Level (
         new Barrier(720 * 5 - 440, -100, 750, 120),
         new Barrier(720 * 5 - 440, -100, 70, 160),
         new Barrier(720 * 5 - 440, 400, 750, 80),
+    ], 
+    [
+        new CoinObject(120, 300),
+        new CoinObject(200, 100),
+        new CoinObject(220, 350),
     ]
 )

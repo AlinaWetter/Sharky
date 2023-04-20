@@ -7,6 +7,7 @@ class Character extends MovableObject {
     IMAGES_DEAD_ELECTRIC = [];
     IMAGES_ATTACK_BUBBLE_NORMAL = [];
     lastAttack;
+    attack = false;
     stopLeft = false;
     stopRight = false;
     stopUp = false;
@@ -18,7 +19,15 @@ class Character extends MovableObject {
     deadPoison = false;
     deadElectric = false;
     bubbleAttack = false;
+    moving;
 
+
+    offset = {
+        x: 60,
+        y: 120,
+        width: -120,
+        height: -180,
+    }
 
 
     constructor() {
@@ -31,6 +40,7 @@ class Character extends MovableObject {
         this.speed = 5;
         this.load();
         this.animate();
+        this.isMoving();
     }
 
     load() {
@@ -65,6 +75,17 @@ class Character extends MovableObject {
         for (let x = 1; x < 9; x++) {
             this.IMAGES_ATTACK_BUBBLE_NORMAL.push(`img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/${x}.png`)
         }
+    }
+
+    isMoving() {
+        setInterval(() => {
+            if (keyboard.RIGHT || keyboard.LEFT || keyboard.UP || keyboard.DOWN) {
+                this.moving = true;
+            } else {
+                this.moving = false;
+            }
+        }, 50);
+
     }
 
     animate() {
@@ -109,7 +130,6 @@ class Character extends MovableObject {
                     break;
 
                 case this.bubbleAttack:
-                    // this.diving_sound.pause();
                     this.playAnimation(this.IMAGES_ATTACK_BUBBLE_NORMAL);
                     if (this.IMAGES_ATTACK_BUBBLE_NORMAL.length == this.currentImage) {
                         this.bubbleAttack = false;
@@ -249,16 +269,6 @@ class Character extends MovableObject {
             };
         }
     }
-
-    // isAttacking() {
-    //     if (!this.isHurt()) {
-    //         let timepassed = new Date().getTime() - this.lastAttack;
-    //         timepassed = timepassed / 1000;
-    //         if (timepassed < 0.795) {
-    //             this.bubbleAttack();
-    //         }
-    //     }
-    // }
 
     isAttacking() {
         this.bubbleAttack = true;

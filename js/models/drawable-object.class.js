@@ -6,6 +6,12 @@ class DrawableObject {
     y;
     width;
     height;
+    offset = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+    }
 
     loadImage(path) {
         this.img = new Image();
@@ -38,10 +44,10 @@ class DrawableObject {
     }
 
     getSmallerCharacterSize(ctx) {
-        let x = this.x + 60;
-        let y = this.y + 120;
-        let width = this.width - 120;
-        let height = this.height - 180;
+        let x = this.x + this.offset.x;
+        let y = this.y + this.offset.y;
+        let width = this.width + this.offset.width;
+        let height = this.height + this.offset.height;
         ctx.beginPath();
         ctx.lineWidth = '3';
         ctx.strokeStyle = 'red';
